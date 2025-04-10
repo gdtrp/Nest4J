@@ -22,9 +22,12 @@
 
     <dependencies>
         <dependency>
+
             <groupId>de.lighti</groupId>
             <artifactId>Clipper</artifactId>
             <version>6.4.2</version>
+            <systemPath>${project.basedir}/deps/Clipper-6.4.2.jar</systemPath>
+            <scope>system</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
