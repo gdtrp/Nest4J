@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.gdtrp</groupId>
-    <artifactId>nest4j</artifactId>
+    <artifactId>Nest4J</artifactId>
     <version>0.0.1</version>
     <build>
         <plugins>
