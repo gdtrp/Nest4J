@@ -22,6 +22,9 @@ public class Segment {
         }
         return false;
     }
+    public int hashCode(){
+        return (int) (x + y);
+    }
 
     public Segment() {
     }

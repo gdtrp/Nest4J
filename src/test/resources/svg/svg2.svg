@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" width="206" height="66">
+    <g id="KN_1" stroke-width="1" stroke="rgb(0,0,0)">
+        <circle cx="13.5" cy="42.5" r="2"/>
+    </g>
+    <g id="KN_2" stroke-width="1" stroke="rgb(0,0,0)">
+        <circle cx="27.5" cy="28.5" r="2"/>
+    </g>
+    <g id="KN_3" stroke-width="1" stroke="rgb(0,0,0)">
+        <circle cx="27.5" cy="42.5" r="22.5"/>
+    </g>
+    <g id="KN_4" stroke-width="1" stroke="rgb(0,0,0)">
+        <circle cx="27.5" cy="42.5" r="2.75"/>
+    </g>
+    <g id="KN_5" stroke-width="1" stroke="rgb(0,0,0)">
+        <circle cx="27.5" cy="56.5" r="2"/>
+    </g>
+    <g id="KN_6" stroke-width="1" stroke="rgb(0,0,0)">
+        <circle cx="41.5" cy="42.5" r="2"/>
+    </g>
+</svg>

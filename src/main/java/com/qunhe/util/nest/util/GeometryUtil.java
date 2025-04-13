@@ -138,11 +138,11 @@ public class GeometryUtil {
             double yj = polygon.get(j).y + offsety;
 
             if(almostEqual(xi, point.x) && almostEqual(yi, point.y)){
-                return null; // no result
+                return false; // no result
             }
 
             if(onSegment( new Segment(xi,yi),new Segment(xj,yj) , point)){
-                return null ; // exactly on the segment
+                return false ; // exactly on the segment
             }
 
             if(almostEqual(xi, xj) && almostEqual(yi, yj)){ // ignore very small lines
