@@ -17,11 +17,20 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class SvgNesting {
-    public static List<NestingResponse> nestSvg(List<NestingElement> elements, double binWidth, double binHeight){
+    public static List<NestingResponse> nestSvg(List<NestingElement> elements, double binWidth, double binHeight) {
+        return nestSvg(elements, 0, 2, binWidth, binHeight);
+    }
+
+    public static List<NestingResponse> nestSvg(List<NestingElement> elements, int rotations, double binWidth, double binHeight) {
+        return nestSvg(elements, rotations, 2, binWidth, binHeight);
+    }
+
+    public static List<NestingResponse> nestSvg(List<NestingElement> elements, int rotations, double spacing, double binWidth, double binHeight) {
 
         Config config = new Config();
-        config.SPACING = 2;
+        config.SPACING = spacing;
         config.POPULATION_SIZE = 5;
+
         NestPath bin = new NestPath();
         bin.add(0, 0);
         bin.add(binWidth, 0);
@@ -36,6 +45,7 @@ public class SvgNesting {
                 item = SvgToNestPathWithTransform.convertSvgToNestPaths(new ByteArrayInputStream(x.getSvg()));
                 item.forEach(z -> {
                     z.bid = ai.getAndIncrement();
+                    z.setRotation(rotations);
                     mapping.put(z.bid, x.getPartId());
                 });
 
@@ -50,7 +60,7 @@ public class SvgNesting {
         //TODO: proper dedup
         output = output.stream().map(x -> new ArrayList<>(new HashSet<>(x))).map(x -> (List<Placement>) x).toList();
         List<String> resultSVG = SvgUtil.svgGenerator(elements.stream().flatMap(x -> {
-           return IntStream.range(0, x.getCount()).mapToObj(i -> new String(x.getSvg()));
+            return IntStream.range(0, x.getCount()).mapToObj(i -> new String(x.getSvg()));
         }).toList(), output, binWidth, binHeight);
 
         AtomicInteger idx = new AtomicInteger(0);

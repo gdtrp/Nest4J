@@ -91,6 +91,15 @@ public class SvgToNestPathWithTransform {
                     }
                 }
                 break;
+            case "line":
+                Shape lineShape = parseLine(elem);
+                if (lineShape != null) {
+                    NestPath linePath = shapeToNestPath(lineShape, thisTransform);
+                    if (linePath.size() > 0) {
+                        nestPaths.add(linePath);
+                    }
+                }
+                break;
             default:
                 throw new IllegalArgumentException("Unsupported tag: " + tagName);
             // similarly, you can add "case polygon:" or "case circle:" etc.
@@ -194,6 +203,20 @@ public class SvgToNestPathWithTransform {
         } catch (NumberFormatException e) {
             // Possibly missing or invalid attributes
             return null;
+        }
+    }
+    private static Shape parseLine(Element lineElem) {
+        try {
+            double x1 = Double.parseDouble(lineElem.getAttribute("x1"));
+            double y1 = Double.parseDouble(lineElem.getAttribute("y1"));
+            double x2 = Double.parseDouble(lineElem.getAttribute("x2"));
+            double y2 = Double.parseDouble(lineElem.getAttribute("y2"));
+            java.awt.geom.Path2D.Double path = new java.awt.geom.Path2D.Double();
+            path.moveTo(x1, y1);
+            path.lineTo(x2, y2);
+            return path;
+        } catch (NumberFormatException e) {
+            return null; // Skip invalid lines
         }
     }
     /**

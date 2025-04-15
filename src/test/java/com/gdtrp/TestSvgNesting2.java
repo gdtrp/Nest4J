@@ -24,4 +24,17 @@ public class TestSvgNesting2 {
         List<NestingResponse> result = SvgNesting.nestSvg(elements, 300, 300);
         System.out.println(new String(result.get(0).getPlacement()));
     }
+
+    @Test
+    public void testNestingSquare() throws IOException {
+        InputStream is = getClass().getClassLoader().getResourceAsStream("svg/square.svg");
+        List<NestingElement> elements = new ArrayList<>();
+        NestingElement element = new NestingElement();
+        element.setSvg(IOUtils.toByteArray(is));
+        element.setCount(30);
+        element.setPartId(UUID.randomUUID());
+        elements.add(element);
+        List<NestingResponse> result = SvgNesting.nestSvg(elements, 10, 300, 300);
+        System.out.println(new String(result.get(0).getPlacement()));
+    }
 }
