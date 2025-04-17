@@ -1,101 +1,90 @@
 <svg width=" 300.0" height="300.0" xmlns="http://www.w3.org/2000/svg">
     <g transform="translate(0 0)">
         <rect x="0" y="0" width="300.0" height="300.0" fill="none" stroke="#010101" stroke-width="1"/>
-        <g transform="translate(-3.9667 77.206) rotate(90.0)">
-            <path d="
-M 29.7939,-46.5586 L 56.7939,-46.5586 L 56.7939,-64.5586 L 29.7939,-64.5586 L 29.7939,-71.9668 L 0.793945,-71.9668
- L 0.793945,-8.9668 L 29.7939,-8.9668 z
-" stroke="black" fill="lightgray" stroke-width="0.5"/>
+        <g transform="translate(202.6598 71.566) rotate(270.0)">
+            <path fill="lightgray" stroke-width="0.5"
+                  d="M 29.0000,25.4082 L 56.0000,25.4082 L 56.0000,7.4082 L 29.0000,7.4082 L 29.0000,0.0000 L 0.0000,0.0000 L 0.0000,63.0000 L 29.0000,63.0000 Z"
+                  stroke="black"/>
         </g>
-        <g transform="translate(77.2061 151.0554) rotate(0.0)">
-            <path d="
-M 29.7939,-46.5586 L 56.7939,-46.5586 L 56.7939,-64.5586 L 29.7939,-64.5586 L 29.7939,-71.9668 L 0.793945,-71.9668
- L 0.793945,-8.9668 L 29.7939,-8.9668 z
-" stroke="black" fill="lightgray" stroke-width="0.5"/>
+        <g transform="translate(70.9999 218.4081) rotate(0.0)">
+            <path fill="lightgray" stroke-width="0.5"
+                  d="M 29.0000,25.4082 L 56.0000,25.4082 L 56.0000,7.4082 L 29.0000,7.4082 L 29.0000,0.0000 L 0.0000,0.0000 L 0.0000,63.0000 L 29.0000,63.0000 Z"
+                  stroke="black"/>
         </g>
-        <g transform="translate(201.5582 77.2907) rotate(270.0)">
-            <path d="
-M 29.7939,-46.5586 L 56.7939,-46.5586 L 56.7939,-64.5586 L 29.7939,-64.5586 L 29.7939,-71.9668 L 0.793945,-71.9668
- L 0.793945,-8.9668 L 29.7939,-8.9668 z
-" stroke="black" fill="lightgray" stroke-width="0.5"/>
+        <g transform="translate(127.0 142.816) rotate(180.0)">
+            <path fill="lightgray" stroke-width="0.5"
+                  d="M 29.0000,25.4082 L 56.0000,25.4082 L 56.0000,7.4082 L 29.0000,7.4082 L 29.0000,0.0000 L 0.0000,0.0000 L 0.0000,63.0000 L 29.0000,63.0000 Z"
+                  stroke="black"/>
         </g>
-        <g transform="translate(76.9667 173.7935) rotate(270.0)">
-            <path d="
-M 29.7939,-46.5586 L 56.7939,-46.5586 L 56.7939,-64.5586 L 29.7939,-64.5586 L 29.7939,-71.9668 L 0.793945,-71.9668
- L 0.793945,-8.9668 L 29.7939,-8.9668 z
-" stroke="black" fill="lightgray" stroke-width="0.5"/>
+        <g transform="translate(68.0 5.0) rotate(90.0)">
+            <path fill="lightgray" stroke-width="0.5"
+                  d="M 29.0000,25.4082 L 56.0000,25.4082 L 56.0000,7.4082 L 29.0000,7.4082 L 29.0000,0.0000 L 0.0000,0.0000 L 0.0000,63.0000 L 29.0000,63.0000 Z"
+                  stroke="black"/>
         </g>
-        <g transform="translate(76.9667 239.7932) rotate(270.0)">
-            <path d="
-M 29.7939,-46.5586 L 56.7939,-46.5586 L 56.7939,-64.5586 L 29.7939,-64.5586 L 29.7939,-71.9668 L 0.793945,-71.9668
- L 0.793945,-8.9668 L 29.7939,-8.9668 z
-" stroke="black" fill="lightgray" stroke-width="0.5"/>
+        <g transform="translate(199.5918 5.0) rotate(90.0)">
+            <path fill="lightgray" stroke-width="0.5"
+                  d="M 29.0000,25.4082 L 56.0000,25.4082 L 56.0000,7.4082 L 29.0000,7.4082 L 29.0000,0.0000 L 0.0000,0.0000 L 0.0000,63.0000 L 29.0000,63.0000 Z"
+                  stroke="black"/>
         </g>
-        <g transform="translate(77.2061 224.0554) rotate(0.0)">
-            <path d="
-M 29.7939,-46.5586 L 56.7939,-46.5586 L 56.7939,-64.5586 L 29.7939,-64.5586 L 29.7939,-71.9668 L 0.793945,-71.9668
- L 0.793945,-8.9668 L 29.7939,-8.9668 z
-" stroke="black" fill="lightgray" stroke-width="0.5"/>
+        <g transform="translate(136.9999 64.8855) rotate(0.0)">
+            <path fill="lightgray" stroke-width="0.5"
+                  d="M 29.0000,25.4082 L 56.0000,25.4082 L 56.0000,7.4082 L 29.0000,7.4082 L 29.0000,0.0000 L 0.0000,0.0000 L 0.0000,63.0000 L 29.0000,63.0000 Z"
+                  stroke="black"/>
         </g>
-        <g transform="translate(143.2059 225.1443) rotate(0.0)">
-            <path d="
-M 29.7939,-46.5586 L 56.7939,-46.5586 L 56.7939,-64.5586 L 29.7939,-64.5586 L 29.7939,-71.9668 L 0.793945,-71.9668
- L 0.793945,-8.9668 L 29.7939,-8.9668 z
-" stroke="black" fill="lightgray" stroke-width="0.5"/>
+        <g transform="translate(275.1193 226.408) rotate(180.0)">
+            <path fill="lightgray" stroke-width="0.5"
+                  d="M 29.0000,25.4082 L 56.0000,25.4082 L 56.0000,7.4082 L 29.0000,7.4082 L 29.0000,0.0000 L 0.0000,0.0000 L 0.0000,63.0000 L 29.0000,63.0000 Z"
+                  stroke="black"/>
         </g>
-        <g transform="translate(4.206 76.9667) rotate(0.0)">
-            <path d="
-M 29.7939,-46.5586 L 56.7939,-46.5586 L 56.7939,-64.5586 L 29.7939,-64.5586 L 29.7939,-71.9668 L 0.793945,-71.9668
- L 0.793945,-8.9668 L 29.7939,-8.9668 z
-" stroke="black" fill="lightgray" stroke-width="0.5"/>
+        <g transform="translate(61.0 281.4081) rotate(180.0)">
+            <path fill="lightgray" stroke-width="0.5"
+                  d="M 29.0000,25.4082 L 56.0000,25.4082 L 56.0000,7.4082 L 29.0000,7.4082 L 29.0000,0.0000 L 0.0000,0.0000 L 0.0000,63.0000 L 29.0000,63.0000 Z"
+                  stroke="black"/>
         </g>
-        <g transform="translate(70.2059 78.0554) rotate(0.0)">
-            <path d="
-M 29.7939,-46.5586 L 56.7939,-46.5586 L 56.7939,-64.5586 L 29.7939,-64.5586 L 29.7939,-71.9668 L 0.793945,-71.9668
- L 0.793945,-8.9668 L 29.7939,-8.9668 z
-" stroke="black" fill="lightgray" stroke-width="0.5"/>
+        <g transform="translate(145.9999 159.8162) rotate(90.0)">
+            <path fill="lightgray" stroke-width="0.5"
+                  d="M 29.0000,25.4082 L 56.0000,25.4082 L 56.0000,7.4082 L 29.0000,7.4082 L 29.0000,0.0000 L 0.0000,0.0000 L 0.0000,63.0000 L 29.0000,63.0000 Z"
+                  stroke="black"/>
         </g>
-        <g transform="translate(211.0729 77.53) rotate(180.0)">
-            <path d="
-M 29.7939,-46.5586 L 56.7939,-46.5586 L 56.7939,-64.5586 L 29.7939,-64.5586 L 29.7939,-71.9668 L 0.793945,-71.9668
- L 0.793945,-8.9668 L 29.7939,-8.9668 z
-" stroke="black" fill="lightgray" stroke-width="0.5"/>
+        <g transform="translate(73.0 208.4081) rotate(180.0)">
+            <path fill="lightgray" stroke-width="0.5"
+                  d="M 29.0000,25.4082 L 56.0000,25.4082 L 56.0000,7.4082 L 29.0000,7.4082 L 29.0000,0.0000 L 0.0000,0.0000 L 0.0000,63.0000 L 29.0000,63.0000 Z"
+                  stroke="black"/>
         </g>
-        <g transform="translate(277.0726 75.8192) rotate(180.0)">
-            <path d="
-M 29.7939,-46.5586 L 56.7939,-46.5586 L 56.7939,-64.5586 L 29.7939,-64.5586 L 29.7939,-71.9668 L 0.793945,-71.9668
- L 0.793945,-8.9668 L 29.7939,-8.9668 z
-" stroke="black" fill="lightgray" stroke-width="0.5"/>
+        <g transform="translate(146.3475 222.0) rotate(0.0)">
+            <path fill="lightgray" stroke-width="0.5"
+                  d="M 29.0000,25.4082 L 56.0000,25.4082 L 56.0000,7.4082 L 29.0000,7.4082 L 29.0000,0.0000 L 0.0000,0.0000 L 0.0000,63.0000 L 29.0000,63.0000 Z"
+                  stroke="black"/>
         </g>
-        <g transform="translate(212.7934 207.2108) rotate(180.0)">
-            <path d="
-M 29.7939,-46.5586 L 56.7939,-46.5586 L 56.7939,-64.5586 L 29.7939,-64.5586 L 29.7939,-71.9668 L 0.793945,-71.9668
- L 0.793945,-8.9668 L 29.7939,-8.9668 z
-" stroke="black" fill="lightgray" stroke-width="0.5"/>
+        <g transform="translate(155.9999 148.9999) rotate(0.0)">
+            <path fill="lightgray" stroke-width="0.5"
+                  d="M 29.0000,25.4082 L 56.0000,25.4082 L 56.0000,7.4082 L 29.0000,7.4082 L 29.0000,0.0000 L 0.0000,0.0000 L 0.0000,63.0000 L 29.0000,63.0000 Z"
+                  stroke="black"/>
         </g>
-        <g transform="translate(284.5179 207.1715) rotate(270.0)">
-            <path d="
-M 29.7939,-46.5586 L 56.7939,-46.5586 L 56.7939,-64.5586 L 29.7939,-64.5586 L 29.7939,-71.9668 L 0.793945,-71.9668
- L 0.793945,-8.9668 L 29.7939,-8.9668 z
-" stroke="black" fill="lightgray" stroke-width="0.5"/>
+        <g transform="translate(5.0 110.0) rotate(0.0)">
+            <path fill="lightgray" stroke-width="0.5"
+                  d="M 29.0000,25.4082 L 56.0000,25.4082 L 56.0000,7.4082 L 29.0000,7.4082 L 29.0000,0.0000 L 0.0000,0.0000 L 0.0000,63.0000 L 29.0000,63.0000 Z"
+                  stroke="black"/>
         </g>
-        <g transform="translate(278.7931 207.4108) rotate(180.0)">
-            <path d="
-M 29.7939,-46.5586 L 56.7939,-46.5586 L 56.7939,-64.5586 L 29.7939,-64.5586 L 29.7939,-71.9668 L 0.793945,-71.9668
- L 0.793945,-8.9668 L 29.7939,-8.9668 z
-" stroke="black" fill="lightgray" stroke-width="0.5"/>
+        <g transform="translate(247.3544 100.2934) rotate(90.0)">
+            <path fill="lightgray" stroke-width="0.5"
+                  d="M 29.0000,25.4082 L 56.0000,25.4082 L 56.0000,7.4082 L 29.0000,7.4082 L 29.0000,0.0000 L 0.0000,0.0000 L 0.0000,63.0000 L 29.0000,63.0000 Z"
+                  stroke="black"/>
         </g>
-        <g transform="translate(69.0333 224.2948) rotate(90.0)">
-            <path d="
-M 29.7939,-46.5586 L 56.7939,-46.5586 L 56.7939,-64.5586 L 29.7939,-64.5586 L 29.7939,-71.9668 L 0.793945,-71.9668
- L 0.793945,-8.9668 L 29.7939,-8.9668 z
-" stroke="black" fill="lightgray" stroke-width="0.5"/>
+        <g transform="translate(5.0 100.0) rotate(270.0)">
+            <path fill="lightgray" stroke-width="0.5"
+                  d="M 29.0000,25.4082 L 56.0000,25.4082 L 56.0000,7.4082 L 29.0000,7.4082 L 29.0000,0.0000 L 0.0000,0.0000 L 0.0000,63.0000 L 29.0000,63.0000 Z"
+                  stroke="black"/>
         </g>
-        <g transform="translate(201.7976 85.4634) rotate(0.0)">
-            <path d="
-M 29.7939,-46.5586 L 56.7939,-46.5586 L 56.7939,-64.5586 L 29.7939,-64.5586 L 29.7939,-71.9668 L 0.793945,-71.9668
- L 0.793945,-8.9668 L 29.7939,-8.9668 z
-" stroke="black" fill="lightgray" stroke-width="0.5"/>
+        <g transform="translate(126.592 69.3488) rotate(180.0)">
+            <path fill="lightgray" stroke-width="0.5"
+                  d="M 29.0000,25.4082 L 56.0000,25.4082 L 56.0000,7.4082 L 29.0000,7.4082 L 29.0000,0.0000 L 0.0000,0.0000 L 0.0000,63.0000 L 29.0000,63.0000 Z"
+                  stroke="black"/>
+        </g>
+        <g transform="translate(205.3599 285.0) rotate(270.0)">
+            <path fill="lightgray" stroke-width="0.5"
+                  d="M 29.0000,25.4082 L 56.0000,25.4082 L 56.0000,7.4082 L 29.0000,7.4082 L 29.0000,0.0000 L 0.0000,0.0000 L 0.0000,63.0000 L 29.0000,63.0000 Z"
+                  stroke="black"/>
         </g>
     </g>
 </svg>

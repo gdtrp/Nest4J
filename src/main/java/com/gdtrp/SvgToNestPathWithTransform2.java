@@ -10,31 +10,24 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.PathIterator;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SvgToNestPathWithTransform {
-
+public class SvgToNestPathWithTransform2 {
     public static List<NestPath> convertSvgToNestPaths(InputStream svgInputStream) throws IOException {
         List<NestPath> nestPaths = new ArrayList<>();
 
-        // 1) Parse the SVG into a Batik Document
         String parser = XMLResourceDescriptor.getXMLParserClassName();
         SAXSVGDocumentFactory factory = new SAXSVGDocumentFactory(parser);
         Document document = factory.createDocument(null, svgInputStream);
 
-        // 2) Recursively process the DOM from the root element
         Element rootElement = document.getDocumentElement();
+        AffineTransform viewBoxTransform = parseViewBox(rootElement);
 
-        // Start with an identity transform because at the top level we have no parent transform yet
-        AffineTransform initialTransform = new AffineTransform();
-        processSvgNode(rootElement, initialTransform, nestPaths);
+        processSvgNode(rootElement, viewBoxTransform, nestPaths);
 
         return nestPaths;
     }
@@ -63,11 +56,8 @@ public class SvgToNestPathWithTransform {
                 String dAttr = elem.getAttribute("d");
                 if (dAttr != null && !dAttr.isEmpty()) {
                     Shape pathShape = parsePathData(dAttr);
-                    // Apply the cumulative transform to that shape
-                    NestPath path = shapeToNestPath(pathShape, thisTransform);
-                    if (path.size() > 0) {
-                        nestPaths.add(path);
-                    }
+                    List<NestPath> paths = shapeToNestPaths(pathShape, thisTransform);
+                    nestPaths.addAll(paths);
                 }
                 break;
             case "rect":
@@ -77,27 +67,27 @@ public class SvgToNestPathWithTransform {
                  */
                 Shape rectShape = parseRect(elem);
                 if (rectShape != null) {
-                    NestPath rectPath = shapeToNestPath(rectShape, thisTransform);
-                    if (rectPath.size() > 0) {
-                        nestPaths.add(rectPath);
+                    List<NestPath> rectPath = shapeToNestPaths(rectShape, thisTransform);
+                    if (!rectPath.isEmpty()) {
+                        nestPaths.addAll(rectPath);
                     }
                 }
                 break;
             case "circle":
                 Shape circleShape = parseCircle(elem);
                 if (circleShape != null) {
-                    NestPath circlePath = shapeToNestPath(circleShape, thisTransform);
-                    if (circlePath.size() > 0) {
-                        nestPaths.add(circlePath);
+                    List<NestPath> circlePath = shapeToNestPaths(circleShape, thisTransform);
+                    if (!circlePath.isEmpty()) {
+                        nestPaths.addAll(circlePath);
                     }
                 }
                 break;
             case "line":
                 Shape lineShape = parseLine(elem);
                 if (lineShape != null) {
-                    NestPath linePath = shapeToNestPath(lineShape, thisTransform);
-                    if (linePath.size() > 0) {
-                        nestPaths.add(linePath);
+                    List<NestPath> linePath = shapeToNestPaths(lineShape, thisTransform);
+                    if (!linePath.isEmpty()) {
+                        nestPaths.addAll(linePath);
                     }
                 }
                 break;
@@ -121,7 +111,7 @@ public class SvgToNestPathWithTransform {
      */
     public static AffineTransform buildTransform(Element elem, AffineTransform parentTransform) {
         // copy the parent transform so we don't mutate it
-        AffineTransform newTransform = new AffineTransform(parentTransform);
+        AffineTransform newTransform = new AffineTransform();
 
         // get this node's "transform" attribute
         String transformStr = elem.getAttribute("transform");
@@ -265,24 +255,85 @@ public class SvgToNestPathWithTransform {
      * Convert an AWT Shape to a NestPath, applying the specified AffineTransform
      * while flattening the shape into line segments.
      */
-    private static NestPath shapeToNestPath(Shape shape, AffineTransform transform) {
-        NestPath nestPath = new NestPath();
+    private static List<NestPath> shapeToNestPaths(Shape shape, AffineTransform transform) {
+        List<NestPath> nestPaths = new ArrayList<>();
+        Area area = new Area(shape);
 
-        // Flatten the shape with a "flatness" parameter (the smaller, the finer the approximation)
-        // Passing 'transform' in getPathIterator applies the accumulated transformations.
-        PathIterator pathIterator = shape.getPathIterator(transform, 0.1);
+        // Extract all subpaths from the Area
+        PathIterator pathIterator = area.getPathIterator(transform);
         double[] coords = new double[6];
+        NestPath currentPath = null;
 
         while (!pathIterator.isDone()) {
             int segmentType = pathIterator.currentSegment(coords);
-            // MoveTo or LineTo => store the point
-            if (segmentType == PathIterator.SEG_MOVETO || segmentType == PathIterator.SEG_LINETO) {
-                nestPath.add(coords[0], coords[1]);
+            switch (segmentType) {
+                case PathIterator.SEG_MOVETO:
+                    currentPath = new NestPath();
+                    currentPath.add(coords[0], coords[1]);
+                    break;
+                case PathIterator.SEG_LINETO:
+                    currentPath.add(coords[0], coords[1]);
+                    break;
+                case PathIterator.SEG_CLOSE:
+                    if (currentPath != null && currentPath.size() > 0) {
+                        // Determine if this subpath is a hole
+                        boolean isHole = !isClockwise(currentPath);
+                        if (isHole && !nestPaths.isEmpty()) {
+                            // Add as a hole to the last main path
+                            nestPaths.get(nestPaths.size() - 1).addChildren(currentPath);
+                        } else {
+                            nestPaths.add(currentPath);
+                        }
+                        currentPath = null;
+                    }
+                    break;
             }
             pathIterator.next();
         }
 
-        return nestPath;
+        return nestPaths;
+    }
+
+    // Helper to check winding direction
+    private static boolean isClockwise(NestPath path) {
+        double area = 0;
+        for (int i = 0; i < path.size(); i++) {
+            int j = (i + 1) % path.size();
+            area += (path.get(j).x - path.get(i).x) * (path.get(j).y + path.get(i).y);
+        }
+        return area > 0; // Positive area = clockwise
+    }
+
+    private static AffineTransform parseViewBox(Element svgElement) {
+        String viewBoxStr = svgElement.getAttribute("viewBox");
+        if (viewBoxStr.isEmpty()) return new AffineTransform();
+
+        String[] parts = viewBoxStr.split(" ");
+        if (parts.length != 4) return new AffineTransform();
+
+        double vbx = Double.parseDouble(parts[0]);
+        double vby = Double.parseDouble(parts[1]);
+        double vbw = Double.parseDouble(parts[2]);
+        double vbh = Double.parseDouble(parts[3]);
+
+        double svgWidth = parseUnit(svgElement.getAttribute("width"));
+        double svgHeight = parseUnit(svgElement.getAttribute("height"));
+
+        // Calculate scale and translation for viewBox
+        double scaleX = svgWidth / vbw;
+        double scaleY = svgHeight / vbh;
+        AffineTransform transform = new AffineTransform();
+        transform.translate(-vbx * scaleX, -vby * scaleY);
+        transform.scale(scaleX, scaleY);
+
+        return transform;
+    }
+
+    private static double parseUnit(String value) {
+        if (value.endsWith("mm")) {
+            return Double.parseDouble(value.substring(0, value.length() - 2));
+        }
+        return Double.parseDouble(value);
     }
 
 }
