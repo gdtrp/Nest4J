@@ -92,7 +92,6 @@ public class SvgNesting {
     public static SingleElementNestingResponse singleSheet(byte[] data, int count, int rotations, double spacing, double binWidth, double binHeight) {
         Config config = new Config();
         config.SPACING = spacing;
-        config.POPULATION_SIZE = 50;
 
 
         NestPath bin = new NestPath();
@@ -108,11 +107,14 @@ public class SvgNesting {
         int idx = 1;
         List<List<Placement>> output = List.of();
         List<byte[]> elements = List.of();
-        int attempts = 0;
         long start = System.currentTimeMillis();
         long round = System.currentTimeMillis();
         UUID id = UUID.randomUUID();
+        int populations = 1;
+        int loops = 1;
+        int attempts = 0;
         while (true) {
+            config.POPULATION_SIZE = populations;
             AtomicInteger ai = new AtomicInteger(0);
 
             elements = IntStream.range(0, idx).mapToObj(y -> data).toList();
@@ -126,14 +128,22 @@ public class SvgNesting {
                         mapping.put(z.bid, id);
                     });
 
+
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
                 return item;
-            }).flatMap(Collection::stream).toList();
-            Nest nest = new Nest(bin, list, config, 100);
+            }).flatMap(Collection::stream).map(x -> {
+                NestPath r = RamerDouglasPeucker.simplify(x, 1);
+                r.setRotation(x.getRotation());
+                r.setSource(x.getSource());
+                return r;
+            }).toList();
+            long startNesting = System.currentTimeMillis();
+            Nest nest = new Nest(bin, list, config, loops);
 
             List<List<Placement>> tempOutput = nest.startNest();
+            logger.info("nested in {} ms. populations {}. loops {}", System.currentTimeMillis() - startNesting, populations, loops);
             if (tempOutput.isEmpty()) {
                 break;
             }
@@ -146,15 +156,32 @@ public class SvgNesting {
                 improved = true;
                 output = tempOutput;
             }
-
-            if (System.currentTimeMillis() - start > 60 * 1000) {
-                logger.info("timeout exceeded:{}", System.currentTimeMillis() - start);
+            if (output.get(0).size() == count) {
+                logger.info("placed maximum possible count on a list {}", count);
                 break;
             }
+
+            if (System.currentTimeMillis() - start > 180 * 1000) {
+                logger.info("timeout exceeded:{}. final result {}", System.currentTimeMillis() - start, output.get(0).size());
+                break;
+            }
+
             if (improved && idx == output.get(0).size()) {
-                logger.info("reached max possible value {}. increase", idx);
-                idx = Math.min(roundExecuted > 5 * 1000 ? idx + 2 : idx * 2, count);
+                loops = 1;
+                populations = 1;
+                int oldIdx = idx;
+                idx = Math.min(roundExecuted > 15 * 1000 ? idx + 10 : idx * 2, count);
+                logger.info("reached max possible value {}. increased to {}", oldIdx, idx);
             } else {
+                loops = Math.min(loops + 10, 100);
+                populations = Math.min(populations + 10, 50);
+                if (loops == 100) {
+                    attempts++;
+                }
+                if (attempts > 50) {
+                    logger.info("too many attempts. final result {}", output.get(0).size());
+                    break;
+                }
                 logger.info("trying same {}. placed {}", idx, output.get(0).size());
             }
             round = System.currentTimeMillis();
@@ -175,6 +202,7 @@ public class SvgNesting {
         response.setFirstPageParts(maxSize);
         response.setPage(resultSVG.get(0).getBytes());
         response.setLastPageParts(remainder);
+        response.setTotalSheets(sheets);
         response.setLastPage(renderLastPage(data, remainder, rotations, spacing, binWidth, binHeight, 0));
         return response;
     }

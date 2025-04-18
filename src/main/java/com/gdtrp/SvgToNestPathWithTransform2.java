@@ -258,9 +258,10 @@ public class SvgToNestPathWithTransform2 {
     private static List<NestPath> shapeToNestPaths(Shape shape, AffineTransform transform) {
         List<NestPath> nestPaths = new ArrayList<>();
         Area area = new Area(shape);
-
+        double flatness = 1.0;
         // Extract all subpaths from the Area
         PathIterator pathIterator = area.getPathIterator(transform);
+        //PathIterator pathIterator = area.getPathIterator(transform, flatness);
         double[] coords = new double[6];
         NestPath currentPath = null;
 
