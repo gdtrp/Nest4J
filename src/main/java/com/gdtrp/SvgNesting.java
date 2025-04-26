@@ -14,10 +14,13 @@ import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
 
 public class SvgNesting {
     private final static Logger logger = LoggerFactory.getLogger(SvgNesting.class);
@@ -88,8 +91,11 @@ public class SvgNesting {
 
     }
 
-
     public static SingleElementNestingResponse singleSheet(byte[] data, int count, int rotations, double spacing, double binWidth, double binHeight) {
+        return singleSheet(data, count, rotations, spacing, binWidth, binHeight, null);
+    }
+
+    public static SingleElementNestingResponse singleSheet(byte[] data, int count, int rotations1, double spacing, double binWidth, double binHeight, Consumer<SingleElementNestingResponse> subResultHandler) {
         Config config = new Config();
         config.SPACING = spacing;
 
@@ -113,6 +119,8 @@ public class SvgNesting {
         int populations = 1;
         int loops = 1;
         int attempts = 0;
+        final AtomicInteger rotations = new AtomicInteger(1);
+        int emptyAttempt = 0;
         while (true) {
             config.POPULATION_SIZE = populations;
             AtomicInteger ai = new AtomicInteger(0);
@@ -122,9 +130,10 @@ public class SvgNesting {
                 List<NestPath> item;
                 try {
                     item = SvgToNestPathWithTransform2.convertSvgToNestPaths(new ByteArrayInputStream(data));
+
                     item.forEach(z -> {
                         z.bid = ai.getAndIncrement();
-                        z.setRotation(rotations);
+                        z.setRotation(rotations.get());
                         mapping.put(z.bid, id);
                     });
 
@@ -157,11 +166,28 @@ public class SvgNesting {
                 output = tempOutput;
             }
             if (output.get(0).size() == count) {
-                logger.info("placed maximum possible count on a list {}", count);
+                BigDecimal area = calculateArea(output.get(0));
+                logger.info("placed maximum possible count on a list {}. area {}", count, area);
                 break;
             }
+            if (subResultHandler != null) {
 
-            if (System.currentTimeMillis() - start > 180 * 1000) {
+                output = output.stream().map(x -> new ArrayList<>(new HashSet<>(x))).map(x -> (List<Placement>) x).toList();
+                int maxSize = output.get(0).size();
+                //count 32
+                //sheets: 1  max size: 8 remainder: 24
+                int sheets = count / maxSize;
+
+                List<String> resultSVG = SvgUtil.svgGenerator(elements.stream().flatMap(x -> IntStream.range(0, count).mapToObj(i -> new String(data))).toList(), output, binWidth, binHeight);
+                SingleElementNestingResponse response = new SingleElementNestingResponse();
+                response.setFirstPageParts(maxSize);
+                response.setPage(resultSVG.get(0).getBytes());
+                response.setTotalSheets(sheets);
+
+                subResultHandler.accept(response);
+            }
+
+            if (System.currentTimeMillis() - start > 30 * 60 * 1000) {
                 logger.info("timeout exceeded:{}. final result {}", System.currentTimeMillis() - start, output.get(0).size());
                 break;
             }
@@ -173,16 +199,25 @@ public class SvgNesting {
                 idx = Math.min(roundExecuted > 15 * 1000 ? idx + 10 : idx * 2, count);
                 logger.info("reached max possible value {}. increased to {}", oldIdx, idx);
             } else {
-                loops = Math.min(loops + 10, 100);
-                populations = Math.min(populations + 10, 50);
-                if (loops == 100) {
+                emptyAttempt = improved ? 0 : ++emptyAttempt;
+                if (roundExecuted < 60 * 1000) {
+                    loops = Math.min(loops + 10, 200);
+                    populations = Math.min(populations + 10, 100);
+                }
+                if (emptyAttempt % 10 == 0 && populations >= 50 && rotations.get() != 4) {
+                    rotations.set(rotations.get() * 2);
+                    logger.info("increase rotations due to big size {}. rotations {}", output.size(), rotations.get());
+                }
+
+                if (roundExecuted > 30 * 1000) {
+                    idx = Math.min(output.get(0).size() + 2, count);
                     attempts++;
                 }
-                if (attempts > 50) {
-                    logger.info("too many attempts. final result {}", output.get(0).size());
+                if (attempts > 10 || emptyAttempt > 30) {
+                    logger.info("too many attempts. final result {}. attempts {}. empty attempts {}", output.get(0).size(), attempts, emptyAttempt);
                     break;
                 }
-                logger.info("trying same {}. placed {}", idx, output.get(0).size());
+                logger.info("trying {}. placed {}. attempt {}", idx, output.get(0).size(), attempts);
             }
             round = System.currentTimeMillis();
         }
@@ -192,8 +227,11 @@ public class SvgNesting {
         //TODO: proper dedup
         output = output.stream().map(x -> new ArrayList<>(new HashSet<>(x))).map(x -> (List<Placement>) x).toList();
         int maxSize = output.get(0).size();
-        int sheets = (count / maxSize) + count % maxSize > 0 ? 1 : 0;
+        //count 32
+        //sheets: 1  max size: 8 remainder: 24
+        int sheets = count / maxSize;
         int remainder = count - sheets * maxSize;
+
         logger.info("sheets: {}  max size: {} remainder: {}. time: {}ms", sheets, maxSize, remainder, System.currentTimeMillis() - start);
 
 
@@ -203,7 +241,7 @@ public class SvgNesting {
         response.setPage(resultSVG.get(0).getBytes());
         response.setLastPageParts(remainder);
         response.setTotalSheets(sheets);
-        response.setLastPage(renderLastPage(data, remainder, rotations, spacing, binWidth, binHeight, 0));
+        response.setLastPage(renderLastPage(data, remainder, rotations.get(), spacing, binWidth, binHeight, 0));
         return response;
     }
 
@@ -250,6 +288,24 @@ public class SvgNesting {
         }
         List<String> resultSVG = SvgUtil.svgGenerator(elements.stream().flatMap(x -> IntStream.range(0, count).mapToObj(i -> new String(data))).toList(), output, binWidth, binHeight);
         return resultSVG.get(0).getBytes();
+    }
+
+    public static BigDecimal calculateArea(List<Placement> placements) {
+        if (placements.isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+
+        double minX = placements.get(0).translate.x;
+        double minY = placements.get(0).translate.y;
+        double maxX = placements.get(0).translate.x;
+        double maxY = placements.get(0).translate.y;
+        for (Placement p : placements) {
+            minX = Math.min(minX, p.translate.x);
+            minY = Math.min(minY, p.translate.y);
+            maxX = Math.max(maxX, p.translate.x);
+            maxY = Math.max(maxY, p.translate.y);
+        }
+        return BigDecimal.valueOf((maxX - minX) * (maxY - minY));
     }
 
 }
